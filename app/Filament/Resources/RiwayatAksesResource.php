@@ -12,10 +12,11 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Spatie\Activitylog\Models\Activity;
 
 class RiwayatAksesResource extends Resource
 {
-protected static ?string $model = RiwayatAkses::class;
+protected static ?string $model = Activity::class;
 
 protected static ?string $navigationGroup = 'Karyawan';
 

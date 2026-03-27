@@ -3,34 +3,126 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\KaryawanResource\Pages;
-use App\Filament\Resources\KaryawanResource\RelationManagers;
 use App\Models\Karyawan;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class KaryawanResource extends Resource
 {
-protected static ?string $model = Karyawan::class;
+    protected static ?string $model = Karyawan::class;
 
-protected static ?string $navigationGroup = 'Karyawan';
+    protected static ?string $navigationGroup = 'Karyawan';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationLabel = 'Karyawan';
 
-protected static ?string $navigationLabel = 'Karyawan';
-protected static ?string $pluralLabel = 'Karyawan';
-protected static ?string $label = 'Karyawan';
 
-protected static ?string $navigationIcon = 'heroicon-o-users';
-protected static ?int $navigationSort = 1;
+
+protected static ?string $modelLabel = 'Karyawan';
+protected static ?string $pluralModelLabel = 'Karyawan';
+  
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Section::make('Data Karyawan')
+                    ->icon('heroicon-o-user')
+                    ->schema([
+                        Forms\Components\Grid::make(2)->schema([
+
+                            Forms\Components\TextInput::make('cabang')
+                                ->required(),
+
+                            Forms\Components\TextInput::make('nama')
+                                ->required(),
+
+                            Forms\Components\TextInput::make('nik'),
+
+                            Forms\Components\TextInput::make('tempat_lahir'),
+
+                            Forms\Components\DatePicker::make('tanggal_lahir'),
+
+                            Forms\Components\Textarea::make('alamat')
+                                ->columnSpanFull(),
+
+                            Forms\Components\TextInput::make('hp'),
+
+                            Forms\Components\Select::make('jenis_kelamin')
+                                ->options([
+                                    'L' => 'Laki-laki',
+                                    'P' => 'Perempuan',
+                                ]),
+
+                            Forms\Components\Toggle::make('menikah'),
+
+                            Forms\Components\TextInput::make('jumlah_anak')
+                                ->numeric(),
+
+                            Forms\Components\Select::make('pendidikan')
+                                ->options([
+                                    'SD' => 'SD',
+                                    'SMP' => 'SMP',
+                                    'SMA' => 'SMA',
+                                    'D3' => 'D3',
+                                    'S1' => 'S1',
+                                ]),
+
+                            Forms\Components\TextInput::make('penyakit'),
+
+                            Forms\Components\TextInput::make('nomor_darurat'),
+
+                           Forms\Components\Select::make('jabatan_id')
+                            ->label('Jabatan')
+                            ->relationship('jabatan', 'nama')
+                            ->searchable()
+                             ->preload(),
+
+
+
+
+
+                            Forms\Components\DatePicker::make('bergabung_pada'),
+
+                            Forms\Components\Toggle::make('is_terapis')
+                                ->label('Terapis'),
+
+                            Forms\Components\Toggle::make('is_active')
+                                ->label('Aktif'),
+
+                            Forms\Components\TextInput::make('gaji_pokok')
+                                ->prefix('Rp')
+                                ->numeric(),
+
+                            Forms\Components\TextInput::make('komisi')
+                                ->suffix('%')
+                                ->numeric(),
+
+                            Forms\Components\TextInput::make('email')
+                                ->email(),
+
+                            Forms\Components\TextInput::make('password')
+                                ->password()
+                                ->dehydrateStateUsing(fn ($state) => filled($state) ? bcrypt($state) : null)
+                                ->dehydrated(fn ($state) => filled($state)),
+
+                            Forms\Components\Select::make('role')
+                                ->options([
+                                    'admin' => 'Admin',
+                                    'terapis' => 'Terapis',
+                                ]),
+
+                            Forms\Components\FileUpload::make('foto')
+                                ->image()
+                                ->directory('karyawan')
+                                ->imagePreviewHeight('150')
+                                ->downloadable()
+                                ->openable(),
+
+                        ])
+                    ])
             ]);
     }
 
@@ -38,7 +130,25 @@ protected static ?int $navigationSort = 1;
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\ImageColumn::make('foto')
+                    ->circular(),
+
+                Tables\Columns\TextColumn::make('nama')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('cabang'),
+
+                Tables\Columns\TextColumn::make('jabatan'),
+
+                Tables\Columns\IconColumn::make('is_active')
+                    ->boolean()
+                    ->label('Aktif'),
+
+                Tables\Columns\TextColumn::make('hp'),
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime(),
             ])
             ->filters([
                 //
@@ -47,9 +157,7 @@ protected static ?int $navigationSort = 1;
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 

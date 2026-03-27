@@ -17,8 +17,8 @@ class JabatanResource extends Resource
 {
 protected static ?string $model = Jabatan::class;
 
-protected static ?string $navigationGroup = 'Karyawan';
 
+protected static ?string $navigationGroup = 'Karyawan';
 protected static ?string $navigationLabel = 'Jabatan';
 protected static ?string $pluralLabel = 'Jabatan';
 protected static ?string $label = 'Jabatan';
@@ -30,7 +30,9 @@ protected static ?int $navigationSort = 2;
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('nama')
+                ->label('Nama Jabatan')
+                ->required(),
             ]);
     }
 
@@ -38,7 +40,14 @@ protected static ?int $navigationSort = 2;
     {
         return $table
             ->columns([
-                //
+            Tables\Columns\TextColumn::make('nama')
+        ->label('Nama Jabatan')
+        ->searchable()
+        ->sortable(),    
+
+
+
+
             ])
             ->filters([
                 //
