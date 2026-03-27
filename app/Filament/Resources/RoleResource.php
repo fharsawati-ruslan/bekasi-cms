@@ -42,7 +42,7 @@ class RoleResource extends Resource
 
                     $menus = collect($get('permissions'))->map(function ($item) use ($state) {
                         return [
-                            'menu' => $item['menu'],
+                            'menu' => $item['menu'] ?? '',
                             'view' => $state,
                             'create' => $state,
                             'update' => $state,
@@ -58,62 +58,91 @@ class RoleResource extends Resource
                 ->schema([
 
                     TextInput::make('menu')
-                        ->disabled(),
+                        ->disabled()
+                        ->dehydrated(true), // penting biar tetap tersimpan
 
                     Grid::make(4)->schema([
                         Checkbox::make('view')->label('Lihat'),
                         Checkbox::make('create')->label('Tambah'),
-                        Checkbox::make('update')->label('Edit'),
+                        Checkbox::make('update')->label('Edit'), 
                         Checkbox::make('delete')->label('Hapus'),
                     ]),
                 ])
-                ->default([
-                    ['menu' => 'Halaman Awal'],
-                    ['menu' => 'Transaksi'],
-                    ['menu' => 'Member'],
-                    ['menu' => 'Tipe Member'],
-                    ['menu' => 'Android'],
-                    ['menu' => 'Poin'],
-                    ['menu' => 'Ekstra Poin'],
-                    ['menu' => 'Karyawan'],
-                    ['menu' => 'Jabatan'],
-                    ['menu' => 'Riwayat Akses'],
-                    ['menu' => 'Daftar Biaya'],
-                    ['menu' => 'Daftar Pinjaman karyawan'],
-                    ['menu' => 'Daftar Gaji karyawan'],
-                    ['menu' => 'Transfer'],
-                    ['menu' => 'Kas'],
-                    ['menu' => 'Laporan Transaksi Dan Biaya'],
-                    ['menu' => 'Laporan Barang'],
-                    ['menu' => 'Laporan gaji'],
-                    ['menu' => 'Laporan Buku Besar'],
-                    ['menu' => 'Laporan Laba Rugi'],
-                    ['menu' => 'Barang Masuk'],
-                    ['menu' => 'Barang Keluar'],
-                    ['menu' => 'Stok'],
-                    ['menu' => 'Nama Voucher'],
-                    ['menu' => 'Generate Voucher'],
-                    ['menu' => 'Item'],
-                    ['menu' => 'Treatment'],
-                    ['menu' => 'Paket'],
-                    ['menu' => 'Wilayah'],
-                    ['menu' => 'Cabang'],
-                    ['menu' => 'Ruangan'],
-                    ['menu' => 'Kamar'],
-                    ['menu' => 'Pengaturan'],
-                    ['menu' => 'Supplier'],
-                    ['menu' => 'Bank'],
-                    ['menu' => 'Satuan'],
-                    ['menu' => 'Tipe Biaya'],
-                    ['menu' => 'Tipe Tranfer'],
-                    ['menu' => 'Tipe pinjaman'],
-                    ['menu' => 'Akses'],
-                     ['menu' => 'Developer'],
 
-                    ])
+
+
+
+
+
+
+                
+                // 🔥 FIX UTAMA: kalau edit kosong → isi default
+                ->afterStateHydrated(function ($component, $state) {
+                    if (empty($state)) {
+                        $component->state(self::getDefaultMenus());
+                    }
+                })
+
+                ->default(self::getDefaultMenus())
+
                 ->disableItemCreation()
-                ->disableItemDeletion(),
+                ->disableItemDeletion()
+                ->columnSpanFull(),
         ]);
+    }
+
+    // 🔥 Helper biar rapi & reusable
+    protected static function getDefaultMenus(): array
+    {
+        return collect([
+            'Halaman Awal',
+            'Transaksi',
+            'Member',
+            'Tipe Member',
+            'Android',
+            'Poin',
+            'Ekstra Poin',
+            'Karyawan',
+            'Jabatan',
+            'Riwayat Akses',
+            'Daftar Biaya',
+            'Daftar Pinjaman karyawan',
+            'Daftar Gaji karyawan',
+            'Transfer',
+            'Kas',
+            'Laporan Transaksi Dan Biaya',
+            'Laporan Barang',
+            'Laporan gaji',
+            'Laporan Buku Besar',
+            'Laporan Laba Rugi',
+            'Barang Masuk',
+            'Barang Keluar',
+            'Stok',
+            'Nama Voucher',
+            'Generate Voucher',
+            'Item',
+            'Treatment',
+            'Paket',
+            'Wilayah',
+            'Cabang',
+            'Ruangan',
+            'Kamar',
+            'Pengaturan',
+            'Supplier',
+            'Bank',
+            'Satuan',
+            'Tipe Biaya',
+            'Tipe Tranfer',
+            'Tipe pinjaman',
+            'Akses',
+            'Developer',
+        ])->map(fn ($menu) => [
+            'menu' => $menu,
+            'view' => false,
+            'create' => false,
+            'update' => false,
+            'delete' => false,
+        ])->toArray();
     }
 
     public static function table(Table $table): Table

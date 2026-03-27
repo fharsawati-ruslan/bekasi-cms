@@ -33,12 +33,26 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+      
             ->login()
 
             // 🎨 warna utama
             ->colors([
-                'primary' => Color::Amber,
+               'primary' => Color::Emerald,
             ])
+           ->renderHook(
+    'panels::head.end',
+    fn () => "
+        <style>
+            .fi-btn-primary {
+                box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+            }
+        </style>
+    "
+)
+
+
+
 
             // 🔥 URUTAN SIDEBAR (FINAL)
             ->navigationGroups([

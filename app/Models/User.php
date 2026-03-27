@@ -16,7 +16,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
-        'role_id', // 🔥 tambahan
+        'role_id',
     ];
 
     protected $hidden = [
@@ -38,10 +38,42 @@ class User extends Authenticatable implements FilamentUser
         return $this->belongsTo(Role::class);
     }
 
-    // 🔐 CHECK PERMISSION
-    public function hasPermission(string $permission): bool
+    // 🔥 CHECK PERMISSION (FIX TOTAL)
+    public function hasPermission(string $menu, string $action): bool
     {
-        return in_array($permission, $this->role?->permissions ?? []);
+        $permissions = $this->role?->permissions ?? [];
+
+        foreach ($permissions as $perm) {
+            if (
+                strtolower($perm['menu'] ?? '') === strtolower($menu) &&
+                ($perm[$action] ?? false) === true
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // 🔥 HELPER BIAR ENAK DIPAKAI
+    public function canView(string $menu): bool
+    {
+        return $this->hasPermission($menu, 'view');
+    }
+
+    public function canCreate(string $menu): bool
+    {
+        return $this->hasPermission($menu, 'create');
+    }
+
+    public function canUpdate(string $menu): bool
+    {
+        return $this->hasPermission($menu, 'update');
+    }
+
+    public function canDelete(string $menu): bool
+    {
+        return $this->hasPermission($menu, 'delete');
     }
 
     // 🔥 BATASI LOGIN HANYA @internal
