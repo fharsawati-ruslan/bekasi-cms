@@ -18,11 +18,8 @@ class KaryawanResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationLabel = 'Karyawan';
 
-
-
-protected static ?string $modelLabel = 'Karyawan';
-protected static ?string $pluralModelLabel = 'Karyawan';
-  
+    protected static ?string $modelLabel = 'Karyawan';
+    protected static ?string $pluralModelLabel = 'Karyawan';
 
     public static function form(Form $form): Form
     {
@@ -33,20 +30,28 @@ protected static ?string $pluralModelLabel = 'Karyawan';
                     ->schema([
                         Forms\Components\Grid::make(2)->schema([
 
-                            Forms\Components\TextInput::make('cabang')
+                            // ✅ CABANG
+                            Forms\Components\Select::make('cabang_id')
+                                ->label('Cabang')
+                                ->relationship('cabang', 'nama')
+                                ->searchable()
+                                ->preload()
                                 ->required(),
 
-                            Forms\Components\TextInput::make('nama')
-                                ->required(),
+                            // ✅ JABATAN
+                            Forms\Components\Select::make('jabatan_id')
+                                ->label('Jabatan')
+                                ->relationship('jabatan', 'nama')
+                                ->searchable()
+                                ->preload(),
 
+                            Forms\Components\TextInput::make('nama')->required(),
                             Forms\Components\TextInput::make('nik'),
 
                             Forms\Components\TextInput::make('tempat_lahir'),
-
                             Forms\Components\DatePicker::make('tanggal_lahir'),
 
-                            Forms\Components\Textarea::make('alamat')
-                                ->columnSpanFull(),
+                            Forms\Components\Textarea::make('alamat')->columnSpanFull(),
 
                             Forms\Components\TextInput::make('hp'),
 
@@ -57,9 +62,7 @@ protected static ?string $pluralModelLabel = 'Karyawan';
                                 ]),
 
                             Forms\Components\Toggle::make('menikah'),
-
-                            Forms\Components\TextInput::make('jumlah_anak')
-                                ->numeric(),
+                            Forms\Components\TextInput::make('jumlah_anak')->numeric(),
 
                             Forms\Components\Select::make('pendidikan')
                                 ->options([
@@ -71,26 +74,12 @@ protected static ?string $pluralModelLabel = 'Karyawan';
                                 ]),
 
                             Forms\Components\TextInput::make('penyakit'),
-
                             Forms\Components\TextInput::make('nomor_darurat'),
-
-                           Forms\Components\Select::make('jabatan_id')
-                            ->label('Jabatan')
-                            ->relationship('jabatan', 'nama')
-                            ->searchable()
-                             ->preload(),
-
-
-
-
 
                             Forms\Components\DatePicker::make('bergabung_pada'),
 
-                            Forms\Components\Toggle::make('is_terapis')
-                                ->label('Terapis'),
-
-                            Forms\Components\Toggle::make('is_active')
-                                ->label('Aktif'),
+                            Forms\Components\Toggle::make('is_terapis')->label('Terapis'),
+                            Forms\Components\Toggle::make('is_active')->label('Aktif'),
 
                             Forms\Components\TextInput::make('gaji_pokok')
                                 ->prefix('Rp')
@@ -100,8 +89,7 @@ protected static ?string $pluralModelLabel = 'Karyawan';
                                 ->suffix('%')
                                 ->numeric(),
 
-                            Forms\Components\TextInput::make('email')
-                                ->email(),
+                            Forms\Components\TextInput::make('email')->email(),
 
                             Forms\Components\TextInput::make('password')
                                 ->password()
@@ -120,7 +108,6 @@ protected static ?string $pluralModelLabel = 'Karyawan';
                                 ->imagePreviewHeight('150')
                                 ->downloadable()
                                 ->openable(),
-
                         ])
                     ])
             ]);
@@ -130,16 +117,18 @@ protected static ?string $pluralModelLabel = 'Karyawan';
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('foto')
-                    ->circular(),
+                Tables\Columns\ImageColumn::make('foto')->circular(),
 
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('cabang'),
+                // ❗ FIX: harus pakai relasi
+                Tables\Columns\TextColumn::make('cabang.nama')
+                    ->label('Cabang'),
 
-                Tables\Columns\TextColumn::make('jabatan'),
+                Tables\Columns\TextColumn::make('jabatan.nama')
+                    ->label('Jabatan'),
 
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean()
@@ -147,11 +136,7 @@ protected static ?string $pluralModelLabel = 'Karyawan';
 
                 Tables\Columns\TextColumn::make('hp'),
 
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
-            ])
-            ->filters([
-                //
+                Tables\Columns\TextColumn::make('created_at')->dateTime(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -159,13 +144,6 @@ protected static ?string $pluralModelLabel = 'Karyawan';
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array
@@ -176,4 +154,4 @@ protected static ?string $pluralModelLabel = 'Karyawan';
             'edit' => Pages\EditKaryawan::route('/{record}/edit'),
         ];
     }
-}
+}   

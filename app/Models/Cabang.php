@@ -8,8 +8,8 @@ class Cabang extends Model
 {
     protected $guarded = [];
 
-    public function transaksis()
+    public function karyawans()
     {
-        return $this->hasMany(Transaksi::class);
+        return $this->hasMany(Karyawan::class, 'cabang_id');
     }
 }
