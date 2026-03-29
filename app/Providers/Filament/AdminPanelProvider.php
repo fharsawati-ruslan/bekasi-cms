@@ -2,12 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use Illuminate\Auth\Events\Login;
-use Illuminate\Auth\Events\Logout;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Facades\LogBatch;
-use Spatie\Activitylog\Facades\Activity;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -33,70 +27,67 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-      
+
             ->login()
 
             // 🎨 warna utama
             ->colors([
-               'primary' => Color::Emerald,
+                'primary' => Color::Emerald,
             ])
-           ->renderHook(
-    'panels::head.end',
-    fn () => "
+            ->renderHook(
+                'panels::head.end',
+                fn () => '
         <style>
             .fi-btn-primary {
                 box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
             }
         </style>
-    "
-)
-
-
-
+    '
+            )
 
             // 🔥 URUTAN SIDEBAR (FINAL)
             ->navigationGroups([
 
-                NavigationGroup::make()
-                    ->label('Transaksi')
-                    ->collapsed(),
+                            NavigationGroup::make()
+                                ->label('Transaksi')
+                                ->collapsed(),
 
-                NavigationGroup::make()
-                    ->label('Member')
-                    ->collapsed(),
+                            NavigationGroup::make()
+                                ->label('Member')
+                                ->collapsed(),
 
-                NavigationGroup::make()
-                    ->label('Karyawan')
-                    ->collapsed(),
+                            NavigationGroup::make()
+                                ->label('Karyawan')
+                                ->collapsed(),
 
-                NavigationGroup::make()
-                    ->label('Keuangan')
-                    ->collapsed(),
+                            NavigationGroup::make()
+                                ->label('Keuangan')
+                                ->collapsed(),
 
-                NavigationGroup::make()
-                    ->label('Laporan')
-                    ->collapsed(),
+                            NavigationGroup::make()
+                                ->label('Laporan')
+                                ->collapsed(),
 
-                NavigationGroup::make()
-                    ->label('Gudang')
-                    ->collapsed(),
+                            NavigationGroup::make()
+                                ->label('Gudang')
+                                ->collapsed(),
 
-                NavigationGroup::make()
-                    ->label('Voucher')
-                    ->collapsed(),
+                            NavigationGroup::make()
+                                ->label('Voucher')
+                                ->collapsed(),
 
-                NavigationGroup::make()
-                    ->label('Produk')
-                    ->collapsed(),
+                            NavigationGroup::make()
+                                ->label('Produk')
+                                ->collapsed(),
 
-                NavigationGroup::make()
-                    ->label('Cabang')
-                    ->collapsed(),
+                            NavigationGroup::make()
+                                ->label('Cabang')
+                                ->collapsed(),
 
-                NavigationGroup::make()
-                    ->label('Master')
-                    ->collapsed(),
-            ])
+                            NavigationGroup::make()
+                                ->label('Master')
+                                ->collapsed(),
+                        ])
 
             // auto load resource
             ->discoverResources(

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kamars', function (Blueprint $table) {
-        $table->id();
-         $table->string('nama'); // penting untuk dropdown
+            $table->id();
+            $table->string('nama'); // penting untuk dropdown
             $table->timestamps();
         });
     }

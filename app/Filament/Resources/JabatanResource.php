@@ -3,36 +3,36 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\JabatanResource\Pages;
-use App\Filament\Resources\JabatanResource\RelationManagers;
 use App\Models\Jabatan;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class JabatanResource extends Resource
 {
-protected static ?string $model = Jabatan::class;
+    protected static ?string $model = Jabatan::class;
 
+    protected static ?string $navigationGroup = 'Karyawan';
 
-protected static ?string $navigationGroup = 'Karyawan';
-protected static ?string $navigationLabel = 'Jabatan';
-protected static ?string $pluralLabel = 'Jabatan';
-protected static ?string $label = 'Jabatan';
+    protected static ?string $navigationLabel = 'Jabatan';
 
-protected static ?string $navigationIcon = 'heroicon-o-briefcase';
-protected static ?int $navigationSort = 2;
+    protected static ?string $pluralLabel = 'Jabatan';
+
+    protected static ?string $label = 'Jabatan';
+
+    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nama')
-                ->label('Nama Jabatan')
-                ->required(),
+                    ->label('Nama Jabatan')
+                    ->required(),
             ]);
     }
 
@@ -40,13 +40,10 @@ protected static ?int $navigationSort = 2;
     {
         return $table
             ->columns([
-            Tables\Columns\TextColumn::make('nama')
-        ->label('Nama Jabatan')
-        ->searchable()
-        ->sortable(),    
-
-
-
+                Tables\Columns\TextColumn::make('nama')
+                    ->label('Nama Jabatan')
+                    ->searchable()
+                    ->sortable(),
 
             ])
             ->filters([

@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->json('permissions')->nullable(); // 🔥 simpan semua centang
 
-
-
             $table->timestamps();
         });
     }

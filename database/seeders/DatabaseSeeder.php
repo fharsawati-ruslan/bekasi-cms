@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Role;
 use App\Models\Pengaturan;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -28,8 +28,8 @@ class DatabaseSeeder extends Seeder
                         'create' => true,
                         'update' => true,
                         'delete' => true,
-                    ]
-                ]
+                    ],
+                ],
             ]
         );
 

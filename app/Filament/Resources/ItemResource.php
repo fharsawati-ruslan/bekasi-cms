@@ -3,26 +3,26 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ItemResource\Pages;
-use App\Filament\Resources\ItemResource\RelationManagers;
 use App\Models\Item;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ItemResource extends Resource
 {
     protected static ?string $model = Item::class;
 
     protected static ?string $navigationGroup = 'Produk';
+
     protected static ?string $navigationLabel = 'Item';
+
     protected static ?string $pluralLabel = 'Item';
+
     protected static ?string $label = 'Item';
 
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';
+
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form

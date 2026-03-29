@@ -3,14 +3,13 @@
 namespace App\Imports;
 
 use App\Models\Cabang;
-use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\SkipsErrors;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Concerns\SkipsOnError;
-use Maatwebsite\Excel\Concerns\SkipsErrors;
 
-class CabangImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnError
+class CabangImport implements SkipsOnError, ToModel, WithHeadingRow, WithValidation
 {
     use SkipsErrors;
 

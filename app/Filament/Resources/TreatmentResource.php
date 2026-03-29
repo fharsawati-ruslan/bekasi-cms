@@ -3,15 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TreatmentResource\Pages;
-use App\Filament\Resources\TreatmentResource\RelationManagers;
 use App\Models\Treatment;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TreatmentResource extends Resource
 {
@@ -20,11 +16,14 @@ class TreatmentResource extends Resource
     protected static ?string $navigationGroup = 'Produk';
 
     protected static ?string $navigationLabel = 'Treatment';
+
     protected static ?string $pluralLabel = 'Treatment';
+
     protected static ?string $label = 'Treatment';
 
-protected static ?string $navigationIcon = 'heroicon-o-sparkles';
-protected static ?int $navigationSort = 3;
+    protected static ?string $navigationIcon = 'heroicon-o-sparkles';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

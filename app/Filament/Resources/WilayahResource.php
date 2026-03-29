@@ -3,15 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\WilayahResource\Pages;
-use App\Filament\Resources\WilayahResource\RelationManagers;
 use App\Models\Wilayah;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class WilayahResource extends Resource
 {
@@ -20,10 +16,13 @@ class WilayahResource extends Resource
     protected static ?string $navigationGroup = 'Cabang';
 
     protected static ?string $navigationLabel = 'Wilayah';
+
     protected static ?string $pluralLabel = 'Wilayah';
+
     protected static ?string $label = 'Wilayah';
 
     protected static ?string $navigationIcon = 'heroicon-o-map';
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form

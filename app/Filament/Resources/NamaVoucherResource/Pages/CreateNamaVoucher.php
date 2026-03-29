@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\NamaVoucherResource\Pages;
 
 use App\Filament\Resources\NamaVoucherResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateNamaVoucher extends CreateRecord

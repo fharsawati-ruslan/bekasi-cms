@@ -3,23 +3,24 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BankResource\Pages;
-use App\Filament\Resources\BankResource\RelationManagers;
 use App\Models\Bank;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BankResource extends Resource
 {
     protected static ?string $model = Bank::class;
+
     protected static ?string $navigationGroup = 'Master';
+
     protected static ?string $navigationLabel = 'Bank';
+
     protected static ?string $pluralLabel = 'Bank';
+
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
+
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form

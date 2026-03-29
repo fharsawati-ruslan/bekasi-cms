@@ -8,6 +8,8 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+// ✅ TAMBAHAN
 use Filament\Tables\Table;
 
 class KaryawanResource extends Resource
@@ -15,10 +17,13 @@ class KaryawanResource extends Resource
     protected static ?string $model = Karyawan::class;
 
     protected static ?string $navigationGroup = 'Karyawan';
+
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
     protected static ?string $navigationLabel = 'Karyawan';
 
     protected static ?string $modelLabel = 'Karyawan';
+
     protected static ?string $pluralModelLabel = 'Karyawan';
 
     public static function form(Form $form): Form
@@ -28,6 +33,7 @@ class KaryawanResource extends Resource
                 Forms\Components\Section::make('Data Karyawan')
                     ->icon('heroicon-o-user')
                     ->schema([
+
                         Forms\Components\Grid::make(2)->schema([
 
                             // ✅ CABANG
@@ -44,6 +50,14 @@ class KaryawanResource extends Resource
                                 ->relationship('jabatan', 'nama')
                                 ->searchable()
                                 ->preload(),
+
+                            // 🔥 ROLE (FIX TOTAL)
+                            Forms\Components\Select::make('role_id')
+                                ->label('Role')
+                                ->relationship('role', 'name')
+                                ->searchable()
+                                ->preload()
+                                ->required(),
 
                             Forms\Components\TextInput::make('nama')->required(),
                             Forms\Components\TextInput::make('nik'),
@@ -78,8 +92,12 @@ class KaryawanResource extends Resource
 
                             Forms\Components\DatePicker::make('bergabung_pada'),
 
-                            Forms\Components\Toggle::make('is_terapis')->label('Terapis'),
-                            Forms\Components\Toggle::make('is_active')->label('Aktif'),
+                            // 🔥 SESUAI MODEL (aktif & terapis)
+                            Forms\Components\Toggle::make('is_terapis')
+                                ->label('Terapis'),
+
+                            Forms\Components\Toggle::make('is_active')
+                                ->label('Aktif'),
 
                             Forms\Components\TextInput::make('gaji_pokok')
                                 ->prefix('Rp')
@@ -96,20 +114,16 @@ class KaryawanResource extends Resource
                                 ->dehydrateStateUsing(fn ($state) => filled($state) ? bcrypt($state) : null)
                                 ->dehydrated(fn ($state) => filled($state)),
 
-                            Forms\Components\Select::make('role')
-                                ->options([
-                                    'admin' => 'Admin',
-                                    'terapis' => 'Terapis',
-                                ]),
+                        ]),
 
-                            Forms\Components\FileUpload::make('foto')
-                                ->image()
-                                ->directory('karyawan')
-                                ->imagePreviewHeight('150')
-                                ->downloadable()
-                                ->openable(),
-                        ])
-                    ])
+                        Forms\Components\FileUpload::make('foto')
+                            ->image()
+                            ->directory('karyawan')
+                            ->imagePreviewHeight('150')
+                            ->downloadable()
+                            ->openable(),
+
+                    ]),
             ]);
     }
 
@@ -119,24 +133,38 @@ class KaryawanResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('foto')->circular(),
 
-                Tables\Columns\TextColumn::make('nama')
+                TextColumn::make('nama')
                     ->searchable()
                     ->sortable(),
 
-                // ❗ FIX: harus pakai relasi
-                Tables\Columns\TextColumn::make('cabang.nama')
+                TextColumn::make('cabang.nama')
                     ->label('Cabang'),
 
-                Tables\Columns\TextColumn::make('jabatan.nama')
+                TextColumn::make('jabatan.nama')
                     ->label('Jabatan'),
+
+                // 🔥 FIX ROLE
+                TextColumn::make('role.name')
+                    ->label('Role')
+                    ->sortable()
+                    ->searchable(),
 
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean()
                     ->label('Aktif'),
 
-                Tables\Columns\TextColumn::make('hp'),
+                TextColumn::make('hp'),
 
-                Tables\Columns\TextColumn::make('created_at')->dateTime(),
+                TextColumn::make('created_at')->dateTime(),
+                Tables\Columns\TextColumn::make('email')
+                ->label('Email')
+                ->searchable()
+                 ->sortable(),
+
+
+
+
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -154,4 +182,4 @@ class KaryawanResource extends Resource
             'edit' => Pages\EditKaryawan::route('/{record}/edit'),
         ];
     }
-}   
+}

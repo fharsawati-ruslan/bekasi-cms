@@ -3,19 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Models\User;
 use App\Models\Role;
-
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
+use App\Models\User;
 use Filament\Forms\Components\Select;
-
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-
 use Filament\Tables;
 use Filament\Tables\Table;
-
 use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
@@ -23,7 +18,9 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $navigationLabel = 'User Management';
+
     protected static ?string $navigationGroup = 'Master';
+
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
@@ -39,7 +36,7 @@ class UserResource extends Resource
                 ->required()
                 ->email()
                 ->suffix('@internal')
-                ->dehydrateStateUsing(fn ($state) => str_contains($state, '@internal') ? $state : $state . '@internal')
+                ->dehydrateStateUsing(fn ($state) => str_contains($state, '@internal') ? $state : $state.'@internal')
                 ->rules(['regex:/@internal$/'])
                 ->validationMessages([
                     'regex' => 'Email harus menggunakan @internal',
@@ -78,6 +75,11 @@ class UserResource extends Resource
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
     }
 
     public static function getRelations(): array

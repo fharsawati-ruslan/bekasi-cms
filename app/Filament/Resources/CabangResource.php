@@ -3,43 +3,39 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CabangResource\Pages;
-use App\Models\Cabang;
-
-use Filament\Forms\Form;
-use Filament\Forms;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Toggle;
-
-use Filament\Resources\Resource;
-
-use Filament\Tables\Table;
-use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
-
-use Filament\Tables\Actions\Action;
-use Filament\Forms\Components\FileUpload;
-
-use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\CabangImport;
-
-use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
-use Illuminate\Support\Facades\Storage;
-
+use App\Models\Cabang;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 
 class CabangResource extends Resource
 {
     protected static ?string $model = Cabang::class;
 
     protected static ?string $navigationGroup = 'Cabang';
+
     protected static ?string $navigationLabel = 'Cabang';
+
     protected static ?string $pluralLabel = 'Cabang';
+
     protected static ?string $label = 'Cabang';
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
+
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
@@ -74,7 +70,7 @@ class CabangResource extends Resource
                             ->label('Aktif?')
                             ->default(true)
                             ->columnSpan(2),
-                    ])
+                    ]),
             ]);
     }
 
@@ -94,38 +90,30 @@ class CabangResource extends Resource
                     ->icon('heroicon-o-arrow-down-tray'),
 
                 Action::make('import')
-    ->label('Import Excel')
-    ->icon('heroicon-o-arrow-up-tray')
-    ->form([
-        FileUpload::make('file')
-            ->disk('public')
-            ->directory('imports')  
-            ->required()
-    ])
-    ->action(function (array $data) {
+                    ->label('Import Excel')
+                    ->icon('heroicon-o-arrow-up-tray')
+                    ->form([
+                        FileUpload::make('file')
+                            ->disk('public')
+                            ->directory('imports')
+                            ->required(),
+                    ])
+                    ->action(function (array $data) {
 
-        $file = $data['file'];
+                        $file = $data['file'];
 
-        if (!str_starts_with($file, 'imports/')) {
-            $file = 'imports/' . $file;
-        }
+                        if (! str_starts_with($file, 'imports/')) {
+                            $file = 'imports/'.$file;
+                        }
 
-        $path = \Illuminate\Support\Facades\Storage::disk('public')->path($file);
+                        $path = Storage::disk('public')->path($file);
 
-        \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\CabangImport, $path);
+                        Excel::import(new CabangImport, $path);
 
-        \Filament\Notifications\Notification::make()
-            ->title('Import berhasil')
-            ->success()
-            ->send();
-
-
-
-
-
-
-
-
+                        Notification::make()
+                            ->title('Import berhasil')
+                            ->success()
+                            ->send();
 
                         Notification::make()
                             ->title('Import berhasil')

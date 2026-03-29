@@ -6,7 +6,7 @@ use Filament\Pages\Page;
 
 class LaporanGaji extends Page
 {
-   protected static ?string $navigationGroup = 'Laporan';
+    protected static ?string $navigationGroup = 'Laporan';
 
     protected static ?string $navigationLabel = 'Laporan Gaji';
 

@@ -4,10 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PengaturanResource\Pages;
 use App\Models\Pengaturan;
-
-use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
-
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,9 +15,13 @@ class PengaturanResource extends Resource
     protected static ?string $model = Pengaturan::class;
 
     protected static ?string $navigationGroup = 'Master';
+
     protected static ?string $navigationLabel = 'Pengaturan';
+
     protected static ?string $pluralLabel = 'Pengaturan';
+
     protected static ?string $navigationIcon = 'heroicon-o-adjustments-horizontal';
+
     protected static ?int $navigationSort = 1;
 
     // ❌ MATIKAN CREATE

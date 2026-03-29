@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('terapis', function (Blueprint $table) {
             $table->id();
-             $table->string('nama'); // penting untuk dropdown
+            $table->string('nama'); // penting untuk dropdown
             $table->timestamps();
         });
     }

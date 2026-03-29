@@ -3,28 +3,27 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\GajiResource\Pages;
-use App\Filament\Resources\GajiResource\RelationManagers;
 use App\Models\Gaji;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class GajiResource extends Resource
 {
-protected static ?string $model = Gaji::class;
+    protected static ?string $model = Gaji::class;
 
-protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = 'Keuangan';
 
-protected static ?string $navigationLabel = 'Gaji';
-protected static ?string $pluralLabel = 'Gaji';
-protected static ?string $label = 'Gaji';
+    protected static ?string $navigationLabel = 'Gaji';
 
-protected static ?string $navigationIcon = 'heroicon-o-banknotes';
-protected static ?int $navigationSort = 3;
+    protected static ?string $pluralLabel = 'Gaji';
+
+    protected static ?string $label = 'Gaji';
+
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

@@ -4,11 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SupplierResource\Pages;
 use App\Models\Supplier;
-
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
-
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,9 +16,13 @@ class SupplierResource extends Resource
     protected static ?string $model = Supplier::class;
 
     protected static ?string $navigationGroup = 'Master';
+
     protected static ?string $navigationLabel = 'Supplier';
+
     protected static ?string $pluralLabel = 'Supplier';
+
     protected static ?string $navigationIcon = 'heroicon-o-truck';
+
     protected static ?int $navigationSort = 2;
 
     // 🔥 FORM

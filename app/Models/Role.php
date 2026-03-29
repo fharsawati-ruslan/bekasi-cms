@@ -15,16 +15,34 @@ class Role extends Model
     ];
 
     protected $casts = [
-        'permissions' => 'array', // 🔥 penting biar JSON jadi array
+        'permissions' => 'array', // 🔥 JSON otomatis jadi array
     ];
 
-    // 🔗 RELASI KE USER
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
+
+    // 🔗 KE USER
     public function users()
     {
         return $this->hasMany(User::class);
     }
 
-    // 🔐 CHECK PERMISSION (optional helper)
+    // 🔗 KE KARYAWAN (INI TAMBAHAN DARI SAYA)
+    public function karyawans()
+    {
+        return $this->hasMany(Karyawan::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | HELPERS
+    |--------------------------------------------------------------------------
+    */
+
+    // 🔐 CEK PERMISSION
     public function hasPermission(string $permission): bool
     {
         return in_array($permission, $this->permissions ?? []);

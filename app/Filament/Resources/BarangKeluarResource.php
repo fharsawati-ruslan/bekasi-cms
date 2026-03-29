@@ -3,28 +3,27 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BarangKeluarResource\Pages;
-use App\Filament\Resources\BarangKeluarResource\RelationManagers;
 use App\Models\BarangKeluar;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BarangKeluarResource extends Resource
 {
-protected static ?string $model = BarangKeluar::class;
+    protected static ?string $model = BarangKeluar::class;
 
-protected static ?string $navigationGroup = 'Gudang';
+    protected static ?string $navigationGroup = 'Gudang';
 
-protected static ?string $navigationLabel = 'Barang Keluar';
-protected static ?string $pluralLabel = 'Barang Keluar';
-protected static ?string $label = 'Barang Keluar';
+    protected static ?string $navigationLabel = 'Barang Keluar';
 
-protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
-protected static ?int $navigationSort = 2;
+    protected static ?string $pluralLabel = 'Barang Keluar';
+
+    protected static ?string $label = 'Barang Keluar';
+
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

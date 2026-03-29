@@ -3,15 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaketResource\Pages;
-use App\Filament\Resources\PaketResource\RelationManagers;
 use App\Models\Paket;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PaketResource extends Resource
 {
@@ -20,11 +16,14 @@ class PaketResource extends Resource
     protected static ?string $navigationGroup = 'Produk';
 
     protected static ?string $navigationLabel = 'Paket';
+
     protected static ?string $pluralLabel = 'Paket';
+
     protected static ?string $label = 'Paket';
 
-protected static ?string $navigationIcon = 'heroicon-o-gift';
-protected static ?int $navigationSort = 4;
+    protected static ?string $navigationIcon = 'heroicon-o-gift';
+
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {

@@ -3,25 +3,30 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TransaksiResource\Pages;
+use App\Models\Member;
 use App\Models\Transaksi;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
 
 class TransaksiResource extends Resource
 {
     protected static ?string $model = Transaksi::class;
+
     protected static ?string $navigationLabel = 'Transaksi';
+
     protected static ?string $pluralLabel = 'Transaksi';
-    protected static ?string $label = 'Transaksi';  
+
+    protected static ?string $label = 'Transaksi';
+
     protected static ?string $modelLabel = 'Transaksi';
+
     protected static ?string $pluralModelLabel = 'Transaksi';
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
-
-
 
     protected static ?int $navigationSort = 2;
 
@@ -31,9 +36,9 @@ class TransaksiResource extends Resource
             ->schema([
 
                 // 🔥 JAM LIVE TARUH DI SINI
-            Forms\Components\Placeholder::make('jam_sekarang')
-                ->label('Waktu Sekarang')
-                ->content(new \Illuminate\Support\HtmlString('
+                Forms\Components\Placeholder::make('jam_sekarang')
+                    ->label('Waktu Sekarang')
+                    ->content(new HtmlString('
                     <div id="live-clock" class="text-lg font-bold flex items-center gap-2">
                         ⏱️ <span></span>
                     </div>
@@ -58,7 +63,6 @@ class TransaksiResource extends Resource
                     </script>
                 ')),
 
-
                 Forms\Components\Grid::make(2)->schema([
 
                     // AUTO FOCUS (INI PENTING 🔥)
@@ -66,8 +70,6 @@ class TransaksiResource extends Resource
                         ->label('Scan / Nama Tamu')
                         ->autofocus()
                         ->required(),
-
-
 
                     Forms\Components\DateTimePicker::make('waktu')
                         ->label('Waktu')
@@ -77,7 +79,7 @@ class TransaksiResource extends Resource
 
                     Forms\Components\TextInput::make('kode_transaksi')
                         ->label('ID Transaksi')
-                        ->default(fn () => 'TRX-' . now()->format('YmdHis'))
+                        ->default(fn () => 'TRX-'.now()->format('YmdHis'))
                         ->disabled()
                         ->dehydrated(),
 
@@ -104,7 +106,7 @@ class TransaksiResource extends Resource
                         ->live()
                         ->afterStateUpdated(function ($state, $set) {
                             if ($state) {
-                                $member = \App\Models\Member::where('kode_member', $state)->first();
+                                $member = Member::where('kode_member', $state)->first();
                                 if ($member) {
                                     $set('member_id', $member->id);
                                 }
@@ -149,7 +151,7 @@ class TransaksiResource extends Resource
                         ->prefix('Rp')
                         ->live()
                         ->afterStateUpdated(function ($set, $get) {
-                            $set('profit', (int)$get('harga') - (int)$get('biaya'));
+                            $set('profit', (int) $get('harga') - (int) $get('biaya'));
                         })
                         ->required(),
 
@@ -158,7 +160,7 @@ class TransaksiResource extends Resource
                         ->prefix('Rp')
                         ->live()
                         ->afterStateUpdated(function ($set, $get) {
-                            $set('profit', (int)$get('harga') - (int)$get('biaya'));
+                            $set('profit', (int) $get('harga') - (int) $get('biaya'));
                         }),
 
                     Forms\Components\TextInput::make('profit')
@@ -196,7 +198,7 @@ class TransaksiResource extends Resource
                         return $query
                             ->when($data['from'], fn ($q) => $q->whereDate('waktu', '>=', $data['from']))
                             ->when($data['to'], fn ($q) => $q->whereDate('waktu', '<=', $data['to']));
-                    })
+                    }),
             ])
 
             ->actions([

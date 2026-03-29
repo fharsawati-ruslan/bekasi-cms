@@ -4,17 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\RoleResource\Pages;
 use App\Models\Role;
-
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Toggle;
-
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -24,7 +21,9 @@ class RoleResource extends Resource
     protected static ?string $model = Role::class;
 
     protected static ?string $navigationLabel = 'Akses';
+
     protected static ?string $navigationGroup = 'Master';
+
     protected static ?string $navigationIcon = 'heroicon-o-key';
 
     public static function form(Form $form): Form
@@ -64,18 +63,11 @@ class RoleResource extends Resource
                     Grid::make(4)->schema([
                         Checkbox::make('view')->label('Lihat'),
                         Checkbox::make('create')->label('Tambah'),
-                        Checkbox::make('update')->label('Edit'), 
+                        Checkbox::make('update')->label('Edit'),
                         Checkbox::make('delete')->label('Hapus'),
                     ]),
                 ])
 
-
-
-
-
-
-
-                
                 // 🔥 FIX UTAMA: kalau edit kosong → isi default
                 ->afterStateHydrated(function ($component, $state) {
                     if (empty($state)) {

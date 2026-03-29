@@ -12,32 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transaksis', function (Blueprint $table) {
-    $table->id();
-    $table->string('kode_transaksi')->nullable();
-    $table->dateTime('waktu')->nullable();
-    $table->string('nama_tamu')->nullable();
+            $table->id();
+            $table->string('kode_transaksi')->nullable();
+            $table->dateTime('waktu')->nullable();
+            $table->string('nama_tamu')->nullable();
 
-    $table->foreignId('cabang_id')->nullable();
-    $table->foreignId('kasir_id')->nullable();
-    $table->foreignId('kamar_id')->nullable();
-    $table->foreignId('member_id')->nullable();
-    $table->foreignId('terapis_id')->nullable();
+            $table->foreignId('cabang_id')->nullable();
+            $table->foreignId('kasir_id')->nullable();
+            $table->foreignId('kamar_id')->nullable();
+            $table->foreignId('member_id')->nullable();
+            $table->foreignId('terapis_id')->nullable();
 
-    $table->string('status')->nullable();
-    $table->string('pembayaran')->nullable();
-    $table->string('voucher')->nullable();
+            $table->string('status')->nullable();
+            $table->string('pembayaran')->nullable();
+            $table->string('voucher')->nullable();
 
-    $table->decimal('harga', 12, 2)->default(0);
-    $table->decimal('biaya', 12, 2)->default(0);
-    $table->decimal('profit', 12, 2)->default(0);
-
-
-
-
-
-
-
-
+            $table->decimal('harga', 12, 2)->default(0);
+            $table->decimal('biaya', 12, 2)->default(0);
+            $table->decimal('profit', 12, 2)->default(0);
 
             $table->timestamps();
         });

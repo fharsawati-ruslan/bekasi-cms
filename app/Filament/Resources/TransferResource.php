@@ -3,28 +3,27 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TransferResource\Pages;
-use App\Filament\Resources\TransferResource\RelationManagers;
 use App\Models\Transfer;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TransferResource extends Resource
 {
-protected static ?string $model = Transfer::class;
+    protected static ?string $model = Transfer::class;
 
-protected static ?string $navigationGroup = 'Keuangan';
+    protected static ?string $navigationGroup = 'Keuangan';
 
-protected static ?string $navigationLabel = 'Transfer';
-protected static ?string $pluralLabel = 'Transfer';
-protected static ?string $label = 'Transfer';
+    protected static ?string $navigationLabel = 'Transfer';
 
-protected static ?string $navigationIcon = 'heroicon-o-arrow-right-circle';
-protected static ?int $navigationSort = 4;
+    protected static ?string $pluralLabel = 'Transfer';
+
+    protected static ?string $label = 'Transfer';
+
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-right-circle';
+
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {

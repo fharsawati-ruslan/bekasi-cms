@@ -3,28 +3,27 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TipeMemberResource\Pages;
-use App\Filament\Resources\TipeMemberResource\RelationManagers;
 use App\Models\TipeMember;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TipeMemberResource extends Resource
 {
-protected static ?string $model = TipeMember::class;
+    protected static ?string $model = TipeMember::class;
 
-protected static ?string $navigationGroup = 'Member';
+    protected static ?string $navigationGroup = 'Member';
 
-protected static ?string $navigationLabel = 'Tipe Member';
-protected static ?string $pluralLabel = 'Tipe Member';
-protected static ?string $label = 'Tipe Member';
+    protected static ?string $navigationLabel = 'Tipe Member';
 
-protected static ?string $navigationIcon = 'heroicon-o-identification';
-protected static ?int $navigationSort = 2;
+    protected static ?string $pluralLabel = 'Tipe Member';
+
+    protected static ?string $label = 'Tipe Member';
+
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
