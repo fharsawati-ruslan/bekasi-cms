@@ -16,4 +16,6 @@ rm -rf storage/framework/sessions/*
 echo "📦 Dump autoload..."
 composer dump-autoload
 
-echo "✅ Done! Alhamdulilah semoga lancar
+echo "✅ Done! Alhamdulilah semoga lancar Mantab Veteran BIFAST
+
+
