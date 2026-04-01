@@ -77,6 +77,7 @@ class CabangResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+           ->defaultSort('nama', 'asc') // 🔥 ascending
             ->columns([
                 TextColumn::make('nama')->searchable(),
                 TextColumn::make('kode')->searchable(),

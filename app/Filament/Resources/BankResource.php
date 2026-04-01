@@ -58,6 +58,7 @@ class BankResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+           ->defaultSort('nama', 'asc') // 🔥 ascending
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),

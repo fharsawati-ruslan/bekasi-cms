@@ -4,19 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Kamar extends Model
+class Wilayah extends Model
 {
     protected $fillable = [
         'cabang_id',
         'nama',
-        'serial_timer',
+        'kode',
+        'aktif',
     ];
 
-    // relasi ke cabang
     public function cabang()
     {
         return $this->belongsTo(Cabang::class);
     }
-
-    
 }

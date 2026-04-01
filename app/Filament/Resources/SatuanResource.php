@@ -45,6 +45,7 @@ class SatuanResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('nama', 'asc') // 🔥 ascendin
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->label('Nama Satuan')
