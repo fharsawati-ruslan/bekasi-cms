@@ -13,11 +13,12 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
+use Illuminate\Support\Facades\Storage;
+
 class PaketResource extends Resource
 {
     protected static ?string $model = Paket::class;
 
-    // ✅ FIX MENU (INI YANG BENAR)
     protected static ?string $navigationGroup = 'Voucher';
     protected static ?string $navigationLabel = 'Nama Voucher';
     protected static ?string $label = 'Nama Voucher';
@@ -31,12 +32,10 @@ class PaketResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->label('Nama')
-                    ->placeholder('masukan nama')
                     ->required(),
 
                 Forms\Components\Select::make('tipe_voucher')
                     ->label('Tipe Voucher')
-                    ->placeholder('-- Pilih Type Voucher --')
                     ->options([
                         'item' => 'Item',
                         'paket' => 'Paket',
@@ -55,7 +54,6 @@ class PaketResource extends Resource
                 Forms\Components\TextInput::make('jumlah_tukar_poin')
                     ->label('Jumlah Tukar Poin')
                     ->numeric()
-                    ->placeholder('masukan jumlah tukar poin')
                     ->required(),
             ]);
     }
@@ -67,40 +65,74 @@ class PaketResource extends Resource
                 Tables\Actions\Action::make('import')
                     ->label('Import CSV')
                     ->icon('heroicon-o-arrow-up-tray')
+
+                    // ✅ GANTI FILEUPLOAD → SELECT FILE SERVER
                     ->form([
-                        Forms\Components\FileUpload::make('file')
-                            ->label('Upload CSV')
-                            ->disk('local')
-                            ->directory('imports')
-                            ->acceptedFileTypes(['text/csv'])
+                        Forms\Components\Select::make('file')
+                            ->label('Pilih File CSV (dari server)')
+                            ->options(function () {
+                                $files = Storage::files('imports');
+
+                                $options = [];
+                                foreach ($files as $file) {
+                                    if (str_ends_with($file, '.csv')) {
+                                        $options[$file] = basename($file);
+                                    }
+                                }
+
+                                return $options;
+                            })
                             ->required(),
                     ])
+
                     ->action(function (array $data) {
 
                         $path = storage_path('app/' . $data['file']);
 
+                        // ✅ DEBUG SAFE
                         if (!file_exists($path)) {
-                            throw new \Exception('File tidak ditemukan di: ' . $path);
+                            throw new \Exception('File tidak ditemukan: ' . $path);
                         }
 
                         $file = fopen($path, 'r');
 
-                        fgetcsv($file); // skip header
+                        if (!$file) {
+                            throw new \Exception('Gagal membuka file.');
+                        }
+
+                        // skip header
+                        fgetcsv($file);
+
+                        $total = 0;
 
                         while (($row = fgetcsv($file)) !== false) {
+
+                            // ✅ SAFE GUARD (biar gak error index)
+                            if (count($row) < 5) {
+                                continue;
+                            }
 
                             Paket::updateOrCreate(
                                 ['nama' => $row[0]],
                                 [
                                     'tipe_voucher' => strtolower($row[1]),
                                     'nilai' => $row[2] ?: null,
-                                    'berlaku_hingga' => $row[3],
-                                    'jumlah_tukar_poin' => $row[4],
+                                    'berlaku_hingga' => $row[3] ?: null,
+                                    'jumlah_tukar_poin' => $row[4] ?: 0,
                                 ]
                             );
+
+                            $total++;
                         }
 
                         fclose($file);
+
+                        // ✅ OPTIONAL: kasih notifikasi
+                        \Filament\Notifications\Notification::make()
+                            ->title('Import berhasil')
+                            ->body("Total data: {$total}")
+                            ->success()
+                            ->send();
                     }),
             ])
             ->columns([
