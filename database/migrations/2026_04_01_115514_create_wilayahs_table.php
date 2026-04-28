@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('wilayahs')) {
         Schema::create('wilayahs', function (Blueprint $table) {
             $table->id();
-              $table->foreignId('cabang_id')->constrained()->cascadeOnDelete();
-    $table->string('nama');
-    $table->string('kode')->nullable();
-    $table->boolean('aktif')->default(true);
-
-
-
+            $table->foreignId('cabang_id')->constrained()->cascadeOnDelete();
+            $table->string('nama');
+            $table->string('kode')->nullable();
+            $table->boolean('aktif')->default(true);
             $table->timestamps();
         });
     }
-
+}
     /**
      * Reverse the migrations.
      */
