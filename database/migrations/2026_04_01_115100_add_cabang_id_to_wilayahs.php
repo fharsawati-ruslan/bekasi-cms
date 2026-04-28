@@ -11,16 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-       if (Schema::hasTable('wilayahs') && !Schema::hasColumn('wilayahs', 'cabang_id')) {
-        Schema::table('wilayahs', function (Blueprint $table) {
-            $table->unsignedBigInteger('cabang_id')->after('id')->nullable();
+        if (Schema::hasTable('wilayahs') && !Schema::hasColumn('wilayahs', 'cabang_id')) {
+            Schema::table('wilayahs', function (Blueprint $table) {
+                $table->unsignedBigInteger('cabang_id')->after('id')->nullable();
 
-            // optional: kalau mau foreign key
-            $table->foreign('cabang_id')
-                  ->references('id')
-                  ->on('cabangs')
-                  ->cascadeOnDelete();
-        });
+                // optional: foreign key
+                $table->foreign('cabang_id')
+                      ->references('id')
+                      ->on('cabangs')
+                      ->cascadeOnDelete();
+            });
+        }
     }
 
     /**
@@ -28,15 +29,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-       
-
-if (Schema::hasColumn('wilayahs', 'cabang_id')) {
-        Schema::table('wilayahs', function (Blueprint $table) {
-            $table->dropForeign(['cabang_id']);
-            $table->dropColumn('cabang_id');
-
-
-
-        });
+        if (Schema::hasTable('wilayahs') && Schema::hasColumn('wilayahs', 'cabang_id')) {
+            Schema::table('wilayahs', function (Blueprint $table) {
+                // drop foreign dulu baru column
+                $table->dropForeign(['cabang_id']);
+                $table->dropColumn('cabang_id');
+            });
+        }
     }
 };
