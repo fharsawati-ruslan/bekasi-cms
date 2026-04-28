@@ -4,8 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaketResource\Pages;
 use App\Models\Paket;
+
+use Filament\Forms;
 use Filament\Forms\Form;
+
 use Filament\Resources\Resource;
+
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -13,50 +17,109 @@ class PaketResource extends Resource
 {
     protected static ?string $model = Paket::class;
 
-    protected static ?string $navigationGroup = 'Produk';
-
-    protected static ?string $navigationLabel = 'Paket';
-
-    protected static ?string $pluralLabel = 'Paket';
-
-    protected static ?string $label = 'Paket';
-
-    protected static ?string $navigationIcon = 'heroicon-o-gift';
-
-    protected static ?int $navigationSort = 4;
+    // ✅ FIX MENU (INI YANG BENAR)
+    protected static ?string $navigationGroup = 'Voucher';
+    protected static ?string $navigationLabel = 'Nama Voucher';
+    protected static ?string $label = 'Nama Voucher';
+    protected static ?string $pluralLabel = 'Nama Voucher';
+    protected static ?string $navigationIcon = 'heroicon-o-ticket';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('nama')
+                    ->label('Nama')
+                    ->placeholder('masukan nama')
+                    ->required(),
+
+                Forms\Components\Select::make('tipe_voucher')
+                    ->label('Tipe Voucher')
+                    ->placeholder('-- Pilih Type Voucher --')
+                    ->options([
+                        'item' => 'Item',
+                        'paket' => 'Paket',
+                        'treatment' => 'Treatment',
+                        'diskon' => 'Diskon',
+                        'potongan' => 'Potongan',
+                    ])
+                    ->required()
+                    ->searchable()
+                    ->native(false),
+
+                Forms\Components\DatePicker::make('berlaku_hingga')
+                    ->label('Berlaku Hingga')
+                    ->displayFormat('d/m/Y'),
+
+                Forms\Components\TextInput::make('jumlah_tukar_poin')
+                    ->label('Jumlah Tukar Poin')
+                    ->numeric()
+                    ->placeholder('masukan jumlah tukar poin')
+                    ->required(),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                //
+            ->headerActions([
+                Tables\Actions\Action::make('import')
+                    ->label('Import CSV')
+                    ->icon('heroicon-o-arrow-up-tray')
+                    ->form([
+                        Forms\Components\FileUpload::make('file')
+                            ->label('Upload CSV')
+                            ->disk('local')
+                            ->directory('imports')
+                            ->acceptedFileTypes(['text/csv'])
+                            ->required(),
+                    ])
+                    ->action(function (array $data) {
+
+                        $path = storage_path('app/' . $data['file']);
+
+                        if (!file_exists($path)) {
+                            throw new \Exception('File tidak ditemukan di: ' . $path);
+                        }
+
+                        $file = fopen($path, 'r');
+
+                        fgetcsv($file); // skip header
+
+                        while (($row = fgetcsv($file)) !== false) {
+
+                            Paket::updateOrCreate(
+                                ['nama' => $row[0]],
+                                [
+                                    'tipe_voucher' => strtolower($row[1]),
+                                    'nilai' => $row[2] ?: null,
+                                    'berlaku_hingga' => $row[3],
+                                    'jumlah_tukar_poin' => $row[4],
+                                ]
+                            );
+                        }
+
+                        fclose($file);
+                    }),
             ])
-            ->filters([
-                //
+            ->columns([
+                Tables\Columns\TextColumn::make('nama')->searchable(),
+                Tables\Columns\TextColumn::make('tipe_voucher'),
+                Tables\Columns\TextColumn::make('berlaku_hingga')->date(),
+                Tables\Columns\TextColumn::make('jumlah_tukar_poin'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

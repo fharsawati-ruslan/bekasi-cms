@@ -13,4 +13,10 @@ class Bank extends Model
         'tampilkan_di_kasir',
         'rekening_global',
     ];
+
+    // 🔥 RELASI KE CABANG
+    public function cabangs()
+    {
+        return $this->belongsToMany(Cabang::class);
+    }
 }

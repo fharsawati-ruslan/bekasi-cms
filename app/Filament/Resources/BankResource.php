@@ -8,6 +8,7 @@ use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -26,17 +27,16 @@ class BankResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
     // =========================
-    // FORM
+    // FORM (dipakai edit page)
     // =========================
     public static function form(Forms\Form $form): Forms\Form
     {
         return $form->schema([
-            TextInput::make('nama')
-                ->required(),
+            TextInput::make('nama')->required(),
 
             TextInput::make('nomor_rekening')
                 ->numeric()
-                ->default(0),
+                ->required(),
 
             TextInput::make('potongan_transaksi')
                 ->numeric()
@@ -49,16 +49,24 @@ class BankResource extends Resource
             Toggle::make('rekening_global')
                 ->label('Rekening Global')
                 ->default(false),
+
+            Select::make('cabangs')
+                ->relationship('cabangs', 'nama')
+                ->multiple()
+                ->searchable()
+                ->preload()
+                ->label('Cabang'),
         ]);
     }
 
     // =========================
-    // TABLE + IMPORT
+    // TABLE + ACTIONS
     // =========================
     public static function table(Table $table): Table
     {
         return $table
-           ->defaultSort('nama', 'asc') // 🔥 ascending
+            ->defaultSort('nama', 'asc')
+
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
@@ -75,6 +83,36 @@ class BankResource extends Resource
             ])
 
             ->headerActions([
+
+                // ✅ SATU-SATUNYA TOMBOL CREATE (MODAL)
+                Tables\Actions\CreateAction::make()
+                    ->label('New bank')
+                    ->modalHeading('Tambah Bank')
+                    ->form([
+                        TextInput::make('nama')->required(),
+
+                        TextInput::make('nomor_rekening')
+                            ->required()
+                            ->numeric(),
+
+                        TextInput::make('potongan_transaksi')
+                            ->numeric()
+                            ->default(0),
+
+                        Toggle::make('tampilkan_di_kasir')
+                            ->default(true),
+
+                        Toggle::make('rekening_global'),
+
+                        Select::make('cabangs')
+                            ->relationship('cabangs', 'nama')
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->label('Cabang'),
+                    ]),
+
+                // ✅ IMPORT CSV
                 Action::make('import')
                     ->label('Import CSV')
                     ->icon('heroicon-o-arrow-up-tray')
@@ -84,12 +122,10 @@ class BankResource extends Resource
                             ->label('File CSV / Excel')
                             ->disk('public')
                             ->directory('imports')
-                            ->required()
+                            ->required(),
                     ])
                     ->action(function (array $data) {
-
                         $path = Storage::disk('public')->path($data['file']);
-
                         Excel::import(new BankImport, $path);
                     })
                     ->successNotificationTitle('Import berhasil'),
@@ -102,7 +138,7 @@ class BankResource extends Resource
     }
 
     // =========================
-    // RELATION
+    // RELATIONS
     // =========================
     public static function getRelations(): array
     {
@@ -110,13 +146,13 @@ class BankResource extends Resource
     }
 
     // =========================
-    // PAGES
+    // PAGES (🔥 CREATE DIHAPUS)
     // =========================
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListBanks::route('/'),
-            'create' => Pages\CreateBank::route('/create'),
+            // ❌ create dihapus biar tidak double tombol
             'edit' => Pages\EditBank::route('/{record}/edit'),
         ];
     }
